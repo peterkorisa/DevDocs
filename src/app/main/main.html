@@ -1,0 +1,35 @@
+<!-- Show article when selected -->
+<div *ngIf="selectedArticle$ | async as article" class="article-view">
+  <h1>{{ article.title }}</h1>
+  
+  <!-- Article Content -->
+  <div class="content">{{ article.content }}</div>
+
+  <!-- Code Examples -->
+  <div *ngIf="article.codeExamples && article.codeExamples.length > 0" class="code-section">
+    <h2>Code Examples</h2>
+    
+    <div *ngFor="let example of article.codeExamples" class="code-block">
+      <div class="code-header">
+        <span class="title">{{ example.title }}</span>
+        <span class="language">{{ example.language }}</span>
+      </div>
+      
+      <div class="code-container">
+        <pre>{{ example.code }}</pre>
+        <button 
+          class="copy-btn" 
+          (click)="copyCode(example.code, example.id)"
+          [class.copied]="copiedId === example.id"
+        >
+          {{ copiedId === example.id ? '✓ Copied' : 'Copy' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Empty state -->
+<div *ngIf="!(selectedArticle$ | async)" class="empty-state">
+  <p>.....</p>
+</div>
