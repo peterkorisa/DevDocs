@@ -3,7 +3,7 @@
   <h1>{{ article.title }}</h1>
   
   <!-- Article Content -->
-  <div class="content">{{ article.content }}</div>
+  <div class="content" [innerHTML]="processContent(article.content, article.sections)"></div>
 
   <!-- Code Examples -->
   <div *ngIf="article.codeExamples && article.codeExamples.length > 0" class="code-section">

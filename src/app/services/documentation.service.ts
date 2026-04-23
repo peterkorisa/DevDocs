@@ -43,6 +43,7 @@ export interface Documentation {
 export class DocumentationService {
   private documentation$ = new BehaviorSubject<DocCategory[]>([]);
   private selectedArticle$ = new BehaviorSubject<DocArticle | null>(null);
+  private searchQuery$ = new BehaviorSubject<string>('');
 
   constructor(private http: HttpClient) {}
 
@@ -75,5 +76,28 @@ export class DocumentationService {
       }
     }
     return null;
+  }
+
+  setSearchQuery(query: string): void {
+    this.searchQuery$.next(query);
+  }
+
+  getSearchQuery(): Observable<string> {
+    return this.searchQuery$.asObservable();
+  }
+
+  filterDocumentation(searchQuery: string): DocCategory[] {
+    if (!searchQuery.trim()) {
+      return this.documentation$.value;
+    }
+
+    const query = searchQuery.toLowerCase();
+    return this.documentation$.value.map(category => ({
+      ...category,
+      children: category.children.filter(article =>
+        article.title.toLowerCase().includes(query) ||
+        article.content.toLowerCase().includes(query)
+      )
+    })).filter(category => category.children.length > 0);
   }
 }

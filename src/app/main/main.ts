@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 import { DocumentationService } from '../services/documentation.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -16,7 +17,10 @@ export class Main implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private copyTimer: any;
 
-  constructor(private docService: DocumentationService) {
+  constructor(
+    private docService: DocumentationService,
+    private route: ActivatedRoute
+  ) {
     this.selectedArticle$ = this.docService.getSelectedArticle();
   }
 
@@ -34,6 +38,31 @@ export class Main implements OnInit, OnDestroy {
         this.copiedId = null;
       }, 2000);
     });
+  }
+
+  processContent(content: string, sections: any[]): string {
+    let processed = content;
+    
+    if (!sections || sections.length === 0) {
+      return processed;
+    }
+
+    sections.forEach(section => {
+      if (!section.id || !section.title || !section.level) {
+        return;
+      }
+      
+      const headingPrefix = '#'.repeat(section.level) + ' ';
+      const headingText = headingPrefix + section.title;
+      
+      // Use regex to replace ALL occurrences with the exact heading pattern
+      const regex = new RegExp('^' + headingText + '$', 'gm');
+      const replacement = `<h${section.level} id="${section.id}">${section.title}</h${section.level}>`;
+      
+      processed = processed.replace(regex, replacement);
+    });
+    
+    return processed;
   }
 
   ngOnDestroy(): void {

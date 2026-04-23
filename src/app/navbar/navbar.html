@@ -3,9 +3,16 @@
     <input
       type="text"
       class="search-bar"
-      placeholder="Search..."
+      placeholder="Search articles..."
       [(ngModel)]="searchQuery"
-      (keyup.enter)="onSearch()"
+      (keyup)="onSearchChange()"
     />
   </div>
+  <button 
+    class="theme-toggle" 
+    (click)="toggleTheme()"
+    [attr.aria-label]="'Switch to ' + (currentTheme === 'light' ? 'dark' : 'light') + ' mode'"
+  >
+    {{ currentTheme === 'light' ? '🌙' : '☀️' }}
+  </button>
 </nav>

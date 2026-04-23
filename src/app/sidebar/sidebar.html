@@ -1,7 +1,7 @@
 <aside class="sidebar">
   <div class="sidebar-content">
     <div class="categories">
-      <div *ngFor="let category of categories$ | async" class="category-item">
+      <div *ngFor="let category of filteredCategories" class="category-item">
         <div class="category-header">
           <span class="category-title">{{ category.title }}</span>
         </div>

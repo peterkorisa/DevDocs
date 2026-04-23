@@ -1,0 +1,58 @@
+.toc {
+  position: fixed;
+  right: 0;
+  top: 80px;
+  height: calc(100vh - 80px);
+  width: 280px;
+  background-color: var(--bg-secondary);
+  border-left: 2px solid var(--border-color);
+  padding: 20px;
+  box-shadow: -2px 0 4px rgba(0,0,0,0.08);
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.toc h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  padding: 10px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.toc ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc li {
+  cursor: pointer;
+  padding: 8px 12px;
+  margin-bottom: 4px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  background: transparent;
+  border-left: 3px solid transparent;
+  transition: all 0.2s ease;
+  border-radius: 2px;
+}
+
+.toc li:hover {
+  color: var(--text-primary);
+  background-color: var(--bg-tertiary);
+  border-left-color: var(--border-color);
+}
+
+.toc li:active {
+  background-color: #b8b8b8;
+  color: #000;
+}
+
+.toc li:last-child {
+  border-bottom: none;
+}

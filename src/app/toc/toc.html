@@ -1,1 +1,14 @@
-<p>toc works!</p>
+<div *ngIf="selectedArticle$ | async as article" class="toc">
+  <h3>On This Page</h3>
+  <ul *ngIf="article.sections && article.sections.length > 0">
+    <li *ngFor="let section of article.sections" 
+        [style.padding-left.px]="(section.level - 2) * 15"
+        (click)="scrollToSection(section.id)"
+        title="Jump to {{ section.title }}">
+      {{ section.title }}
+    </li>
+  </ul>
+  <div *ngIf="!article.sections || article.sections.length === 0" style="padding: 10px; color: #666; font-size: 12px;">
+    No sections available
+  </div>
+</div>
