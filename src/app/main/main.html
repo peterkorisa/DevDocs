@@ -1,35 +1,60 @@
-<!-- Show article when selected -->
-<div *ngIf="selectedArticle$ | async as article" class="article-view">
-  <h1>{{ article.title }}</h1>
-  
-  <!-- Article Content -->
-  <div class="content" [innerHTML]="processContent(article.content, article.sections)"></div>
-
-  <!-- Code Examples -->
-  <div *ngIf="article.codeExamples && article.codeExamples.length > 0" class="code-section">
-    <h2>Code Examples</h2>
-    
-    <div *ngFor="let example of article.codeExamples" class="code-block">
-      <div class="code-header">
-        <span class="title">{{ example.title }}</span>
-        <span class="language">{{ example.language }}</span>
-      </div>
-      
-      <div class="code-container">
-        <pre>{{ example.code }}</pre>
-        <button 
-          class="copy-btn" 
-          (click)="copyCode(example.code, example.id)"
-          [class.copied]="copiedId === example.id"
+@if (selectedArticle$ | async; as article) {
+  <article class="article-view">
+    <header class="article-header">
+      <div class="article-title-row">
+        <h1>{{ article.title }}</h1>
+        <button
+          class="bookmark-btn"
+          type="button"
+          [attr.aria-label]="isFavorite(article.id) ? 'Remove bookmark for ' + article.title : 'Bookmark ' + article.title"
+          (click)="toggleFavorite(article.id)"
         >
-          {{ copiedId === example.id ? '✓ Copied' : 'Copy' }}
+          {{ isFavorite(article.id) ? 'Bookmarked ★' : 'Bookmark ☆' }}
         </button>
       </div>
-    </div>
-  </div>
-</div>
+      <p class="article-intro">{{ article.content }}</p>
+    </header>
 
-<!-- Empty state -->
-<div *ngIf="!(selectedArticle$ | async)" class="empty-state">
-  <p>.....</p>
-</div>
+    @if (article.sections && article.sections.length > 0) {
+      <div class="article-sections">
+        @for (section of article.sections; track section.id) {
+          <section class="doc-section" [id]="section.id">
+            <h2 [class.sub-level]="section.level > 2">{{ section.title }}</h2>
+
+            @for (paragraph of getSectionParagraphs(article, section); track paragraph) {
+              <p>{{ paragraph }}</p>
+            }
+
+            @if (getSectionCodeExamples(article, section).length > 0) {
+              <div class="section-code">
+                @for (example of getSectionCodeExamples(article, section); track example.id) {
+                  <div class="code-block">
+                    <div class="code-header">
+                      <span class="title">{{ example.title }}</span>
+                      <span class="language">{{ example.language }}</span>
+                    </div>
+
+                    <div class="code-container">
+                      <pre>{{ example.code }}</pre>
+                      <button
+                        class="copy-btn"
+                        (click)="copyCode(example.code, example.id)"
+                        [class.copied]="copiedId === example.id"
+                      >
+                        {{ copiedId === example.id ? '✓ Copied' : 'Copy' }}
+                      </button>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+          </section>
+        }
+      </div>
+    }
+  </article>
+} @else {
+  <div class="empty-state">
+    <p>Select an article from the sidebar to start browsing.</p>
+  </div>
+}

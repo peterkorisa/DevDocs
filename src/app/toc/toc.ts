@@ -21,32 +21,18 @@ export class TOC implements OnInit, OnDestroy {
   ngOnInit(): void {}
 
   scrollToSection(sectionId: string): void {
-    // Small delay to ensure DOM is fully rendered
-    setTimeout(() => {
-      const element = document.getElementById(sectionId);
-      console.log('Looking for section:', sectionId, 'Found:', !!element);
-      
-      if (element) {
-        // Scroll the main-content container
-        const mainContent = document.querySelector('.main-content') as HTMLElement;
-        if (mainContent) {
-          const elementRect = element.getBoundingClientRect();
-          const containerRect = mainContent.getBoundingClientRect();
-          const scrollPosition = mainContent.scrollTop + (elementRect.top - containerRect.top) - 50;
-          
-          mainContent.scrollTo({ 
-            top: scrollPosition, 
-            behavior: 'smooth' 
-          });
-          
-          console.log('Scrolled to:', sectionId);
-        } else {
-          console.warn('main-content container not found');
-        }
-      } else {
-        console.warn('Element with id not found:', sectionId);
-      }
-    }, 100);
+    const element = document.getElementById(sectionId);
+    const mainContent = document.querySelector('.main-content') as HTMLElement | null;
+
+    if (!element || !mainContent) {
+      return;
+    }
+
+    const topOffset = element.offsetTop - 24;
+    mainContent.scrollTo({
+      top: topOffset,
+      behavior: 'smooth'
+    });
   }
 
   ngOnDestroy(): void {

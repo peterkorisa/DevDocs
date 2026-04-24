@@ -7,14 +7,24 @@
         </div>
 
         <div class="category-children">
-          <button
-            *ngFor="let article of category.children"
-            class="article-item"
-            [class.active]="selectedArticleId === article.id"
-            (click)="selectArticle(article)"
-          >
-            {{ article.title }}
-          </button>
+          <div *ngFor="let article of category.children" class="article-row">
+            <button
+              class="article-item"
+              [class.active]="selectedArticleId === article.id"
+              (click)="selectArticle(article)"
+            >
+              {{ article.title }}
+            </button>
+            <button
+              class="favorite-btn"
+              type="button"
+              [class.active]="isFavorite(article.id)"
+              [attr.aria-label]="isFavorite(article.id) ? 'Remove bookmark for ' + article.title : 'Bookmark ' + article.title"
+              (click)="toggleFavorite(article.id, $event)"
+            >
+              {{ isFavorite(article.id) ? '★' : '☆' }}
+            </button>
+          </div>
         </div>
       </div>
     </div>

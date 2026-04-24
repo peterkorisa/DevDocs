@@ -31,28 +31,38 @@
 }
 
 .toc li {
+  padding: 0;
+  margin-bottom: 4px;
+}
+
+.toc li button {
+  width: 100%;
+  text-align: left;
   cursor: pointer;
   padding: 8px 12px;
-  margin-bottom: 4px;
   font-size: 13px;
   color: var(--text-secondary);
   background: transparent;
+  border: 0;
   border-left: 3px solid transparent;
   transition: all 0.2s ease;
   border-radius: 2px;
 }
 
-.toc li:hover {
+.toc li button:hover,
+.toc li button:focus-visible {
   color: var(--text-primary);
   background-color: var(--bg-tertiary);
   border-left-color: var(--border-color);
-}
-
-.toc li:active {
-  background-color: #b8b8b8;
-  color: #000;
+  outline: none;
 }
 
 .toc li:last-child {
   border-bottom: none;
+}
+
+.toc-empty {
+  padding: 10px;
+  color: var(--text-tertiary);
+  font-size: 12px;
 }

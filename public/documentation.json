@@ -1,311 +1,278 @@
 {
   "documentation": [
     {
-      "id": "angular",
-      "title": "Angular Documentation",
-      "description": "Complete Angular framework documentation",
-      "icon": "angular",
+      "id": "cat-introduction",
+      "title": "Introduction",
+      "description": "Start with the basics of modern Angular.",
+      "icon": "info-circle",
       "children": [
         {
-          "id": "angular-intro",
-          "title": "Introduction",
-          "slug": "angular/introduction",
-          "content": "# Introduction to Angular\n\nAngular is a platform for building mobile and desktop web applications. It's built with TypeScript and provides a complete solution for building scalable applications.\n\n## What is Angular?\n\nAngular is a TypeScript-based open-source web application framework led by the Angular Team at Google. It provides a complete toolkit for building dynamic single-page applications.\n\n## Key Features\n\n- **Component-Based**: Build encapsulated components that manage their own state\n- **Reactive Programming**: Use RxJS for reactive data flows\n- **Type Safety**: Full TypeScript support out of the box\n- **Dependency Injection**: Built-in DI container for managing dependencies\n- **Testing**: First-class testing support with Jasmine and Karma\n- **CLI**: Powerful command-line interface for scaffolding and building",
+          "id": "page-what-is-angular",
+          "title": "What is Angular?",
+          "slug": "guide/overview",
+          "content": "Angular is a web development framework for building modern apps. Every component must have: A TypeScript class with behaviors, an HTML template, and a CSS selector. You provide Angular-specific information via the @Component decorator. It provides a suite of tools for developers to build, test, and update their code with ease. Angular is built on TypeScript and provides high-quality libraries for routing, forms, client-server communication, and more. It emphasizes testability, maintainability, and strong typing through TypeScript. The Angular ecosystem includes a CLI, schematics, a robust router, and an extensive set of official libraries to accelerate development.",
           "sections": [
-            {
-              "id": "angular-what-is",
-              "title": "What is Angular?",
-              "level": 2
-            },
-            {
-              "id": "angular-features",
-              "title": "Key Features",
-              "level": 2
-            }
+            { "id": "features-power", "title": "Features that power your development", "level": 2 },
+            { "id": "develop-faster", "title": "Develop applications faster than ever", "level": 2 },
+            { "id": "ship-confidence", "title": "Ship with confidence", "level": 2 },
+            { "id": "works-scale", "title": "Works at any scale", "level": 2 }
           ],
           "codeExamples": [
             {
-              "id": "basic-component",
-              "title": "Basic Component",
+              "id": "hello-world",
+              "title": "Hello World Component",
               "language": "typescript",
-              "code": "import { Component } from '@angular/core';\n\n@Component({\n  selector: 'app-hello',\n  template: '<h1>Hello {{ name }}</h1>',\n  standalone: true\n})\nexport class HelloComponent {\n  name = 'Angular';\n}"
-            }
-          ]
-        },
-        {
-          "id": "angular-routing",
-          "title": "Routing & Navigation",
-          "slug": "angular/routing",
-          "content": "# Angular Routing & Navigation\n\nThe Angular Router enables navigation from one view to the next as users perform application tasks.\n\n## Router Module\n\nThe Router is an optional service that presents a particular component view for a given URL. It allows you to create single-page applications with navigation without the page being reloaded as users navigate.\n\n## Routes Configuration\n\nDefine routes using the `Routes` interface and configure them in your application. You can create nested routes to maintain a fixed layout (like a sidebar) while swapping content.",
-          "sections": [
-            {
-              "id": "router-module",
-              "title": "Router Module",
-              "level": 2
-            },
-            {
-              "id": "routes-config",
-              "title": "Routes Configuration",
-              "level": 2
-            }
-          ],
-          "codeExamples": [
-            {
-              "id": "basic-routing",
-              "title": "Basic Routing Setup",
-              "language": "typescript",
-              "code": "import { Routes } from '@angular/router';\nimport { HomeComponent } from './home/home.component';\nimport { AboutComponent } from './about/about.component';\n\nexport const routes: Routes = [\n  { path: '', component: HomeComponent },\n  { path: 'about', component: AboutComponent },\n  { path: '**', redirectTo: '' }\n];"
-            },
-            {
-              "id": "nested-routing",
-              "title": "Nested Child Routes",
-              "language": "typescript",
-              "code": "export const routes: Routes = [\n  {\n    path: 'docs',\n    component: DocsLayoutComponent,\n    children: [\n      { path: 'intro', component: IntroComponent },\n      { path: 'guide', component: GuideComponent },\n      { path: 'api', component: ApiComponent }\n    ]\n  }\n];"
-            }
-          ]
-        },
-        {
-          "id": "angular-components",
-          "title": "Components",
-          "slug": "angular/components",
-          "content": "# Angular Components\n\nComponents are the basic building blocks of Angular applications. A component controls a patch of screen called a view.\n\n## Component Anatomy\n\nEvery component consists of a TypeScript class, an HTML template, and optional CSS styles. Components use the @Component decorator to define metadata.\n\n## Standalone Components\n\nWith Angular 14+, you can create standalone components without needing to declare them in NgModules.",
-          "sections": [
-            {
-              "id": "component-anatomy",
-              "title": "Component Anatomy",
-              "level": 2
-            },
-            {
-              "id": "standalone-components",
-              "title": "Standalone Components",
-              "level": 2
-            }
-          ],
-          "codeExamples": [
-            {
-              "id": "component-example",
-              "title": "Component Example",
-              "language": "typescript",
-              "code": "import { Component } from '@angular/core';\nimport { CommonModule } from '@angular/common';\n\n@Component({\n  selector: 'app-user-list',\n  standalone: true,\n  imports: [CommonModule],\n  template: `\n    <div>\n      <h2>Users</h2>\n      <ul>\n        <li *ngFor=\"let user of users\">{{ user.name }}</li>\n      </ul>\n    </div>\n  `,\n  styles: ['h2 { color: blue; }']\n})\nexport class UserListComponent {\n  users = [{name: 'John'}, {name: 'Jane'}];\n}"
+              "code": "@Component({\n  selector: 'hello-world',\n  template: '<h1>Hello World</h1>'\n})\nexport class HelloWorldComponent {}"
             }
           ]
         }
       ]
     },
     {
-      "id": "typescript",
-      "title": "TypeScript Documentation",
-      "description": "TypeScript language reference and guides",
-      "icon": "typescript",
+      "id": "cat-components",
+      "title": "Components",
+      "description": "Building blocks of your Angular application interface.",
+      "icon": "puzzle-piece",
       "children": [
         {
-          "id": "ts-intro",
-          "title": "Getting Started",
-          "slug": "typescript/getting-started",
-          "content": "# TypeScript Getting Started\n\nTypeScript is a typed superset of JavaScript that compiles to plain JavaScript.\n\n## Why TypeScript?\n\n- **Type Safety**: Catch errors at compile time instead of runtime\n- **Better IDE Support**: Get intelligent code completion and refactoring\n- **Object-Oriented Features**: Classes, interfaces, and modules\n- **Enhanced Readability**: Self-documenting code with type annotations\n- **Early Error Detection**: Errors are caught during development\n\n## Installation\n\nInstall TypeScript globally using npm: `npm install -g typescript`",
+          "id": "components-anatomy",
+          "title": "Anatomy of a component",
+          "slug": "guide/components",
+          "content": "Components are the building blocks of Angular applications. They consist of a TypeScript class, an HTML template, and CSS styles. Every component defines a CSS selector that determines how it is used in HTML. Angular matches selectors statically at compile-time. The @Component decorator defines metadata such as the selector and template. Components encourage separation of concerns, enabling encapsulation of template, style, and behavior. Properly designed components are reusable, testable, and easy to reason about.",
           "sections": [
-            {
-              "id": "ts-why",
-              "title": "Why TypeScript?",
-              "level": 2
-            },
-            {
-              "id": "ts-installation",
-              "title": "Installation",
-              "level": 2
-            }
+            { "id": "using-components", "title": "Using components", "level": 2 },
+            { "id": "imports", "title": "Imports in the @Component decorator", "level": 3 },
+            { "id": "showing-components", "title": "Showing components in a template", "level": 3 }
           ],
           "codeExamples": [
-            {
-              "id": "ts-types",
-              "title": "TypeScript Types",
-              "language": "typescript",
-              "code": "// Basic Types\nlet name: string = 'John';\nlet age: number = 25;\nlet isActive: boolean = true;\n\n// Arrays\nlet numbers: number[] = [1, 2, 3];\nlet items: Array<string> = ['a', 'b', 'c'];\n\n// Union Types\nlet id: string | number = 123;\nid = 'ABC-123';\n\n// Any Type (avoid when possible)\nlet data: any = 'this can be anything';"
-            }
+            { "id": "comp-1", "title": "Basic Component", "language": "typescript", "code": "@Component({\n  selector: 'app-user',\n  template: '<h1>Hello {{name}}</h1>'\n})\nexport class UserComponent {\n  name = 'Angular';\n}" },
+            { "id": "comp-2", "title": "Profile Photo Component", "language": "typescript", "code": "@Component({\n  selector: 'profile-photo',\n  template: `<img src=\"profile-photo.jpg\" />`,\n})\nexport class ProfilePhoto {}" }
           ]
         },
         {
-          "id": "ts-interfaces",
-          "title": "Interfaces",
-          "slug": "typescript/interfaces",
-          "content": "# TypeScript Interfaces\n\nInterfaces define contracts within your code and allow you to define custom types. They are used to ensure type safety in TypeScript.\n\n## Creating Interfaces\n\nUse the `interface` keyword to define a new interface. Interfaces are purely structural and are removed during compilation.",
+          "id": "components-selectors",
+          "title": "Component selectors",
+          "slug": "guide/components/selectors",
+          "content": "Selectors determine how components are used in templates. Every component defines a CSS selector that determines how it is used in HTML. Angular matches selectors statically at compile-time. Angular supports type selectors, attribute selectors, and class selectors. Custom element names are recommended. Choosing the right selector improves clarity and avoids collisions with standard HTML or third-party libraries. Prefer element selectors with a consistent prefix for library components.",
           "sections": [
-            {
-              "id": "ts-interface-creation",
-              "title": "Creating Interfaces",
-              "level": 2
-            }
+            { "id": "types", "title": "Types of selectors", "level": 2 },
+            { "id": "not-pseudo", "title": "The :not pseudo-class", "level": 3 },
+            { "id": "combining", "title": "Combining selectors", "level": 3 },
+            { "id": "choosing", "title": "Choosing a selector", "level": 2 },
+            { "id": "prefixes", "title": "Selector prefixes", "level": 3 },
+            { "id": "attribute-when", "title": "When to use an attribute selector", "level": 3 }
           ],
           "codeExamples": [
-            {
-              "id": "interface-example",
-              "title": "Interface Example",
-              "language": "typescript",
-              "code": "interface User {\n  id: number;\n  name: string;\n  email?: string; // Optional property\n  age: number;\n  readonly createdAt?: Date; // Read-only property\n}\n\nconst user: User = {\n  id: 1,\n  name: 'John Doe',\n  age: 30\n};"
-            }
+            { "id": "sel-1", "title": "Attribute Selector", "language": "typescript", "code": "@Component({\n  selector: 'button[app-upload]',\n  template: '<p>Upload button</p>'\n})\nexport class UploadButton {}" }
           ]
         },
         {
-          "id": "ts-generics",
-          "title": "Generics",
-          "slug": "typescript/generics",
-          "content": "# TypeScript Generics\n\nGenerics provide a way to create reusable components that work over a variety of types rather than a single one.\n\n## Generic Functions\n\nGeneric functions allow you to write a function that works with multiple types while still maintaining type safety.",
+          "id": "components-inputs",
+          "title": "Accepting data with input properties",
+          "slug": "guide/components/inputs",
+          "content": "Components specify data they accept by declaring inputs using the `input()` function. This returns an `InputSignal` which is read-only. Inputs allow data to flow from parent to child components. Modern Angular uses the input() function for signal-based inputs, which are read-only and observable. Inputs should be treated as immutable from the child's perspective; derive computed values instead of mutating inputs. Document required inputs and types clearly to aid consumers and avoid runtime surprises.",
           "sections": [
-            {
-              "id": "ts-generic-functions",
-              "title": "Generic Functions",
-              "level": 2
-            }
+            { "id": "reading-inputs", "title": "Reading inputs", "level": 2 },
+            { "id": "required-inputs", "title": "Required inputs", "level": 2 },
+            { "id": "configuring-inputs", "title": "Configuring inputs", "level": 2 },
+            { "id": "transforms", "title": "Input transforms", "level": 3 },
+            { "id": "aliases", "title": "Input aliases", "level": 3 },
+            { "id": "model-inputs", "title": "Model inputs", "level": 2 }
           ],
           "codeExamples": [
-            {
-              "id": "generic-function",
-              "title": "Generic Function Example",
-              "language": "typescript",
-              "code": "function identity<T>(value: T): T {\n  return value;\n}\n\nconst result1: string = identity<string>('hello');\nconst result2: number = identity<number>(42);\n\n// Generic with constraint\nfunction getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {\n  return obj[key];\n}"
-            }
+            { "id": "inp-1", "title": "Signal Input", "language": "typescript", "code": "value = input(0);\nlabel = computed(() => `Val: ${this.value()}`);" },
+            { "id": "inp-2", "title": "Required Signal Input", "language": "typescript", "code": "value = input.required<number>();" }
+          ]
+        },
+        {
+          "id": "components-outputs",
+          "title": "Custom events with outputs",
+          "slug": "guide/components/outputs",
+          "content": "Angular components define custom events by assigning a property to the `output()` function. You can emit events by calling the `.emit()` method. Outputs allow child components to communicate back to parents. Use typed event payloads and document expected event shapes to reduce integration errors. Throttle or debounce frequent events to avoid performance problems in complex UIs.",
+          "sections": [
+            { "id": "emitting-data", "title": "Emitting event data", "level": 2 },
+            { "id": "custom-names", "title": "Customizing output names", "level": 2 },
+            { "id": "programmatic", "title": "Subscribing to outputs programmatically", "level": 2 }
+          ],
+          "codeExamples": [
+            { "id": "out-1", "title": "Declaring Output", "language": "typescript", "code": "panelClosed = output<void>();" },
+            { "id": "out-2", "title": "Emitting Output", "language": "typescript", "code": "this.panelClosed.emit();" }
+          ]
+        },
+        {
+          "id": "components-lifecycle",
+          "title": "Component Lifecycle",
+          "slug": "guide/components/lifecycle",
+          "content": "A component's lifecycle is the sequence of steps between creation and destruction. You can implement hooks like `ngOnInit`, `ngOnChanges`, and `ngOnDestroy`. Examples include afterEveryRender and afterNextRender for interaction with the DOM. Use lifecycle hooks sparingly and prefer reactive patterns when possible; many side-effects can be handled with signals and effects. Always clean up subscriptions and resources in `ngOnDestroy` to avoid leaks.",
+          "sections": [
+            { "id": "summary", "title": "Summary", "level": 2 },
+            { "id": "on-init", "title": "ngOnInit", "level": 3 },
+            { "id": "on-changes", "title": "ngOnChanges", "level": 3 },
+            { "id": "on-destroy", "title": "ngOnDestroy", "level": 3 },
+            { "id": "render-hooks", "title": "afterEveryRender and afterNextRender", "level": 3 }
+          ],
+          "codeExamples": []
+        }
+      ]
+    },
+    {
+      "id": "cat-templates",
+      "title": "Templates",
+      "description": "Angular template syntax, binding and control flow.",
+      "icon": "code",
+      "children": [
+        {
+          "id": "templates-binding",
+          "title": "Template Binding",
+          "slug": "guide/templates/binding",
+          "content": "Bindings create a dynamic connection between data and templates. This includes interpolation {{}}, property binding [], and event binding (). Double curly braces {{ }} are used for text interpolation. Angular tracks signals read in templates to update the page. Keep templates declarative and simple—move business logic into the component class or computed signals. Avoid heavy computations in bindings to prevent rendering overhead and maintain responsive UIs.",
+          "sections": [
+            { "id": "interpolation", "title": "Render dynamic text with interpolation", "level": 2 },
+            { "id": "dynamic-props", "title": "Binding dynamic properties and attributes", "level": 2 },
+            { "id": "css-class-style", "title": "CSS class and style property bindings", "level": 2 }
+          ],
+          "codeExamples": [
+            { "id": "bind-1", "title": "Interpolation", "language": "html", "code": "<p>Color: {{ theme }}</p>" }
+          ]
+        },
+        {
+          "id": "templates-control-flow",
+          "title": "Control Flow",
+          "slug": "guide/templates/control-flow",
+          "content": "Angular templates support @if, @for, and @switch blocks for conditional rendering and looping. These built-in blocks replace the older *ngIf and *ngFor directives. Modern Angular uses @inline blocks for control flow. Prefer clarity and readability when composing nested control-flow constructs. Use track identifiers in loops to preserve DOM state and improve rendering performance.",
+          "sections": [
+            { "id": "if-block", "title": "Conditionally display content with @if", "level": 2 },
+            { "id": "for-block", "title": "Repeat content with @for", "level": 2 },
+            { "id": "for-track", "title": "Why is track in @for blocks important?", "level": 3 },
+            { "id": "empty-block", "title": "Fallback with @empty", "level": 3 }
+          ],
+          "codeExamples": [
+            { "id": "cf-1", "title": "@for example", "language": "html", "code": "@for (item of items; track item.id) { ... }" }
           ]
         }
       ]
     },
     {
-      "id": "rxjs",
-      "title": "RxJS Documentation",
-      "description": "Reactive Extensions for JavaScript",
-      "icon": "rxjs",
+      "id": "cat-signals",
+      "title": "Signals",
+      "description": "Fine-grained reactivity in Angular.",
+      "icon": "bolt",
       "children": [
         {
-          "id": "rxjs-intro",
-          "title": "Introduction",
-          "slug": "rxjs/introduction",
-          "content": "# RxJS - Reactive Extensions for JavaScript\n\nRxJS is a library for reactive programming using Observables to make it easier to compose asynchronous or callback-based code.\n\n## Core Concepts\n\n- **Observables**: Represent a collection of future values or events over time\n- **Observers**: Functions that listen to Observable values and react to them\n- **Operators**: Functions that transform Observable values or combine multiple Observables\n- **Subscription**: The act of subscribing to an Observable to receive its values\n\n## Why RxJS?\n\nRxJS provides a powerful way to handle:\n- Asynchronous operations\n- Event handling\n- Data streams\n- Complex async flows with minimal code",
+          "id": "signals-overview",
+          "title": "Angular Signals",
+          "slug": "guide/signals",
+          "content": "Signals are a system that tracks how and where state is used. They include Writable Signals, Computed Signals, and Effects. Signals provide a reactive way to track state changes. Writable signals can be updated via set() or update(), while computed signals derive values lazily. Signals enable predictable change propagation and simplify reasoning about when parts of your UI should update. Adopt signals incrementally to modernize reactivity with minimal disruption to existing code.",
           "sections": [
-            {
-              "id": "rxjs-concepts",
-              "title": "Core Concepts",
-              "level": 2
-            },
-            {
-              "id": "rxjs-why",
-              "title": "Why RxJS?",
-              "level": 2
-            }
+            { "id": "what-are-signals", "title": "What are signals?", "level": 2 },
+            { "id": "writable", "title": "Writable signals", "level": 3 },
+            { "id": "computed", "title": "Computed signals", "level": 3 },
+            { "id": "reactive-contexts", "title": "Reactive contexts", "level": 2 }
           ],
           "codeExamples": [
-            {
-              "id": "observable-example",
-              "title": "Observable Example",
-              "language": "typescript",
-              "code": "import { Observable } from 'rxjs';\n\nconst observable = new Observable(observer => {\n  observer.next('Hello');\n  observer.next('World');\n  observer.complete();\n});\n\nobservable.subscribe({\n  next: (value) => console.log(value),\n  error: (err) => console.error(err),\n  complete: () => console.log('Done')\n});"
-            }
-          ]
-        },
-        {
-          "id": "rxjs-operators",
-          "title": "Common Operators",
-          "slug": "rxjs/operators",
-          "content": "# RxJS Operators\n\nOperators are functions that operate on Observables and return new Observables. They enable powerful data transformation and composition.\n\n## Categories\n\n- **Transformation**: map, flatMap, switchMap, mergeMap\n- **Filtering**: filter, debounceTime, throttleTime, distinct, take\n- **Combination**: merge, concat, combineLatest, withLatestFrom\n- **Utility**: tap, delay, timeout\n\n## Pipe Method\n\nThe `pipe()` method allows you to chain multiple operators together.",
-          "sections": [
-            {
-              "id": "rxjs-categories",
-              "title": "Operator Categories",
-              "level": 2
-            },
-            {
-              "id": "rxjs-pipe",
-              "title": "Pipe Method",
-              "level": 2
-            }
-          ],
-          "codeExamples": [
-            {
-              "id": "rxjs-map",
-              "title": "Map Operator",
-              "language": "typescript",
-              "code": "import { of } from 'rxjs';\nimport { map } from 'rxjs/operators';\n\nof(1, 2, 3)\n  .pipe(\n    map(x => x * 2),\n    map(x => x + 10)\n  )\n  .subscribe(result => console.log(result)); // 12, 14, 16"
-            },
-            {
-              "id": "rxjs-debounce",
-              "title": "DebounceTime Operator (for Search)",
-              "language": "typescript",
-              "code": "import { fromEvent } from 'rxjs';\nimport { debounceTime, map, distinctUntilChanged } from 'rxjs/operators';\n\nconst searchInput = document.getElementById('search');\nconst searchStream = fromEvent<InputEvent>(searchInput, 'input')\n  .pipe(\n    debounceTime(300), // Wait 300ms after user stops typing\n    map(event => (event.target as HTMLInputElement).value),\n    distinctUntilChanged() // Only emit if value changed\n  )\n  .subscribe(query => console.log('Search:', query));"
-            }
-          ]
-        },
-        {
-          "id": "rxjs-subjects",
-          "title": "Subjects",
-          "slug": "rxjs/subjects",
-          "content": "# RxJS Subjects\n\nA Subject is a special type of Observable that allows values to be multicasted to multiple Observers.\n\n## Subject Types\n\n- **Subject**: Basic Subject that multicasts to all observers\n- **BehaviorSubject**: Emits the last emitted value to new subscribers\n- **ReplaySubject**: Replays a specified number of values to new subscribers\n- **AsyncSubject**: Emits only the last value when the Observable completes",
-          "sections": [
-            {
-              "id": "rxjs-subject-types",
-              "title": "Subject Types",
-              "level": 2
-            }
-          ],
-          "codeExamples": [
-            {
-              "id": "behavior-subject",
-              "title": "BehaviorSubject Example",
-              "language": "typescript",
-              "code": "import { BehaviorSubject } from 'rxjs';\n\nconst counter = new BehaviorSubject<number>(0);\n\n// New subscriber gets the current value immediately\ncounter.subscribe(value => console.log('Count:', value)); // Logs: Count: 0\n\ncounter.next(1); // Logs: Count: 1\ncounter.next(2); // Logs: Count: 2\n\n// New subscriber also gets current value\ncounter.subscribe(value => console.log('New sub:', value)); // Logs: New sub: 2"
-            }
+            { "id": "sig-1", "title": "Writable Signal", "language": "typescript", "code": "const count = signal(0);" },
+            { "id": "sig-2", "title": "Computed Signal", "language": "typescript", "code": "const double = computed(() => count() * 2);" }
           ]
         }
       ]
     },
     {
-      "id": "html-css",
-      "title": "HTML & CSS",
-      "description": "HTML and CSS fundamentals and best practices",
-      "icon": "html",
+      "id": "cat-di",
+      "title": "Dependency Injection",
+      "description": "How Angular manages class dependencies.",
+      "icon": "plug",
       "children": [
         {
-          "id": "html-intro",
-          "title": "HTML Basics",
-          "slug": "html-css/html-basics",
-          "content": "# HTML Basics\n\nHTML (HyperText Markup Language) is the standard markup language for creating web pages.\n\n## Structure\n\nEvery HTML document should have the following basic structure:\n\n```html\n<!DOCTYPE html>\n<html>\n  <head>\n    <title>Page Title</title>\n  </head>\n  <body>\n    <!-- Content goes here -->\n  </body>\n</html>\n```\n\n## Common Elements\n\n- **Headings**: `<h1>` to `<h6>`\n- **Paragraphs**: `<p>`\n- **Links**: `<a>`\n- **Lists**: `<ul>`, `<ol>`, `<li>`\n- **Semantic Elements**: `<header>`, `<nav>`, `<main>`, `<footer>`",
+          "id": "di-overview",
+          "title": "DI in Angular",
+          "slug": "guide/di",
+          "content": "DI is a pattern for sharing code by injecting features into different parts of the application. Components and services participate in DI via the inject() function. A dependency is an object a class needs to work. Angular uses DI to provide these values to components and services. Design services around single responsibility and inject them at the appropriate scope to control lifetime and sharing. Prefer constructor-less `inject()` for fine-grained control in functions and standalone components when appropriate.",
           "sections": [
-            {
-              "id": "html-structure",
-              "title": "Structure",
-              "level": 2
-            },
-            {
-              "id": "html-elements",
-              "title": "Common Elements",
-              "level": 2
-            }
+            { "id": "how-it-works", "title": "How does DI work?", "level": 2 },
+            { "id": "what-services", "title": "What are services?", "level": 2 },
+            { "id": "injecting-func", "title": "Injecting dependencies with inject()", "level": 2 }
           ],
           "codeExamples": [
-            {
-              "id": "html-semantic",
-              "title": "Semantic HTML",
-              "language": "html",
-              "code": "<header>\n  <nav>\n    <ul>\n      <li><a href=\"/\">Home</a></li>\n      <li><a href=\"/about\">About</a></li>\n    </ul>\n  </nav>\n</header>\n<main>\n  <article>\n    <h1>Article Title</h1>\n    <p>Article content goes here.</p>\n  </article>\n</main>\n<footer>\n  <p>&copy; 2026 My Site</p>\n</footer>"
-            }
+            { "id": "di-1", "title": "Using inject()", "language": "typescript", "code": "private service = inject(MyService);" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cat-routing",
+      "title": "Routing",
+      "description": "Navigation and URL management.",
+      "icon": "map",
+      "children": [
+        {
+          "id": "routing-overview",
+          "title": "Define routes",
+          "slug": "guide/routing",
+          "content": "Routes define which component renders for a specific URL path. In Angular, you provide a Routes array to the provideRouter function. The Angular Router enables navigation by interpreting browser URLs as instructions to change the view. Use route guards and resolvers to protect and prefetch data for routes. Keep routing configuration modular to support lazy loading and clear separation between feature areas.",
+          "sections": [
+            { "id": "what-are-routes", "title": "What are routes?", "level": 2 },
+            { "id": "url-paths", "title": "Route URL Paths", "level": 2 },
+            { "id": "wildcards", "title": "Wildcards", "level": 3 },
+            { "id": "nested-routes", "title": "Nested Routes", "level": 2 }
+          ],
+          "codeExamples": [
+            { "id": "route-1", "title": "Route Definition", "language": "typescript", "code": "{ path: 'admin', component: AdminPage }" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cat-forms",
+      "title": "Forms",
+      "description": "Handling user input with Angular forms.",
+      "icon": "edit",
+      "children": [
+        {
+          "id": "forms-overview",
+          "title": "Forms in Angular",
+          "slug": "guide/forms",
+          "content": "Angular provides Reactive and Template-driven approaches. Reactive forms offer explicit access to the form model, while Template-driven forms use directives like ngModel. Choosing the right approach depends on the form complexity. Validate inputs early and provide clear user feedback. Leverage typed forms and custom validators for complex scenarios to improve developer ergonomics and runtime safety.",
+          "sections": [
+            { "id": "choosing-approach", "title": "Choosing an approach", "level": 2 },
+            { "id": "setup-model", "title": "Setting up the form model", "level": 2 },
+            { "id": "data-flow", "title": "Data flow in forms", "level": 2 }
+          ],
+          "codeExamples": []
+        }
+      ]
+    },
+    {
+      "id": "cat-http",
+      "title": "HTTP Client",
+      "description": "Communicating with backend services.",
+      "icon": "cloud",
+      "children": [
+        {
+          "id": "http-setup",
+          "title": "Setting up HttpClient",
+          "slug": "guide/http",
+          "content": "You must configure HttpClient using provideHttpClient() in your application config. It supports features like withFetch, interceptors, and JSONP. Configure interceptors for concerns like authentication, logging, and error handling. Keep API contracts consistent and use typed request/response models for safer HTTP interactions.",
+          "sections": [
+            { "id": "providing-http", "title": "Providing HttpClient", "level": 2 },
+            { "id": "configuring-features", "title": "Configuring features of HttpClient", "level": 2 },
+            { "id": "with-fetch", "title": "withFetch", "level": 3 }
+          ],
+          "codeExamples": [
+            { "id": "http-1", "title": "HttpClient Provider", "language": "typescript", "code": "providers: [provideHttpClient(withFetch())]" }
           ]
         },
         {
-          "id": "css-intro",
-          "title": "CSS Fundamentals",
-          "slug": "html-css/css-fundamentals",
-          "content": "# CSS Fundamentals\n\nCSS (Cascading Style Sheets) is used to style and layout web pages — for example, to alter the font, color, size, and spacing of your content.\n\n## Selectors\n\n- **Element**: `p`, `div`, `h1`\n- **Class**: `.classname`\n- **ID**: `#idname`\n- **Attribute**: `[type=\"text\"]`\n- **Pseudo-classes**: `:hover`, `:focus`, `:active`",
+          "id": "http-requests",
+          "title": "Making HTTP requests",
+          "slug": "guide/http/making-requests",
+          "content": "HttpClient provides methods for GET, POST, PUT, DELETE. They return cold Observables that only execute the request upon subscription. Handle errors explicitly and follow idempotency rules for unsafe methods. Use centralized services to coordinate HTTP interactions and caching strategies to improve performance and resilience.",
           "sections": [
-            {
-              "id": "css-selectors",
-              "title": "Selectors",
-              "level": 2
-            }
+            { "id": "fetching-json", "title": "Fetching JSON data", "level": 2 },
+            { "id": "mutating-state", "title": "Mutating server state", "level": 2 },
+            { "id": "advanced-options", "title": "Advanced fetch options", "level": 2 }
           ],
           "codeExamples": [
-            {
-              "id": "css-flexbox",
-              "title": "Flexbox Layout",
-              "language": "css",
-              "code": ".container {\n  display: flex;\n  justify-content: center; /* Horizontal alignment */\n  align-items: center; /* Vertical alignment */\n  gap: 16px; /* Space between items */\n  flex-wrap: wrap; /* Wrap items to next line */\n}\n\n.item {\n  flex: 1 1 200px; /* Grow, Shrink, Basis */\n  padding: 16px;\n  background: #f0f0f0;\n}"
-            }
+            { "id": "http-2", "title": "GET Request", "language": "typescript", "code": "http.get<Config>('/api/config').subscribe(...)" }
           ]
         }
       ]

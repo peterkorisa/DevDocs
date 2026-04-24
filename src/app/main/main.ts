@@ -1,9 +1,6 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
-import { DocumentationService } from '../services/documentation.service';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { DocumentationService, DocArticle, Section } from '../services/documentation.service';
 
 @Component({
   selector: 'app-main',
@@ -11,27 +8,19 @@ import { takeUntil } from 'rxjs/operators';
   templateUrl: './main.html',
   styleUrl: './main.css',
 })
-export class Main implements OnInit, OnDestroy {
+export class Main implements OnDestroy {
   selectedArticle$!: ReturnType<typeof this.docService.getSelectedArticle>;
   copiedId: string | null = null;
-  private destroy$ = new Subject<void>();
-  private copyTimer: any;
+  private copyTimer: ReturnType<typeof setTimeout> | null = null;
 
-  constructor(
-    private docService: DocumentationService,
-    private route: ActivatedRoute
-  ) {
+  constructor(private docService: DocumentationService) {
     this.selectedArticle$ = this.docService.getSelectedArticle();
-  }
-
-  ngOnInit(): void {
-    // Component ready
   }
 
   copyCode(code: string, exampleId: string): void {
     navigator.clipboard.writeText(code).then(() => {
       this.copiedId = exampleId;
-      
+
       // Reset button after 2 seconds
       if (this.copyTimer) clearTimeout(this.copyTimer);
       this.copyTimer = setTimeout(() => {
@@ -40,34 +29,38 @@ export class Main implements OnInit, OnDestroy {
     });
   }
 
-  processContent(content: string, sections: any[]): string {
-    let processed = content;
-    
-    if (!sections || sections.length === 0) {
-      return processed;
+  getSectionParagraphs(article: DocArticle, section: Section): string[] {
+    if (section.body?.trim()) {
+      return section.body
+        .split(/\n\n+/)
+        .map((paragraph) => paragraph.trim())
+        .filter((paragraph) => paragraph.length > 0);
     }
 
-    sections.forEach(section => {
-      if (!section.id || !section.title || !section.level) {
-        return;
-      }
-      
-      const headingPrefix = '#'.repeat(section.level) + ' ';
-      const headingText = headingPrefix + section.title;
-      
-      // Use regex to replace ALL occurrences with the exact heading pattern
-      const regex = new RegExp('^' + headingText + '$', 'gm');
-      const replacement = `<h${section.level} id="${section.id}">${section.title}</h${section.level}>`;
-      
-      processed = processed.replace(regex, replacement);
-    });
-    
-    return processed;
+    const overview = `${section.title} in ${article.title} explains the practical foundation of this topic and how it connects to day-to-day Angular development. ${article.content}`;
+    const practice = `In practice, teams usually combine this concept with typed APIs, predictable state updates, and clear component boundaries. Build small examples first, then scale the pattern to larger features while keeping naming, folder structure, and responsibilities consistent.`;
+    const quality = `For production-ready implementation, focus on readability, accessibility, and maintainability. Add tests around critical behavior, document assumptions, and revisit this section as your app grows so the same pattern remains easy to browse and understand over time.`;
+
+    return [overview, practice, quality];
+  }
+
+  getSectionCodeExamples(article: DocArticle, section: Section): Array<{ id: string; title: string; language: string; code: string }> {
+    if (section.codeExamples && section.codeExamples.length > 0) {
+      return section.codeExamples;
+    }
+
+    return article.codeExamples ?? [];
+  }
+
+  toggleFavorite(articleId: string): void {
+    this.docService.toggleFavorite(articleId);
+  }
+
+  isFavorite(articleId: string): boolean {
+    return this.docService.isFavorite(articleId);
   }
 
   ngOnDestroy(): void {
     if (this.copyTimer) clearTimeout(this.copyTimer);
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 }

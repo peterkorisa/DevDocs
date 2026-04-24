@@ -15,6 +15,7 @@ export class Sidebar implements OnInit, OnDestroy {
   categories$!: ReturnType<typeof this.docService.getDocumentation>;
   filteredCategories: DocCategory[] = [];
   selectedArticleId: string | null = null;
+  favoriteArticleIds = new Set<string>();
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -49,11 +50,26 @@ export class Sidebar implements OnInit, OnDestroy {
           this.selectedArticleId = article.id;
         }
       });
+
+    this.docService.getFavoriteArticleIds()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((favoriteIds) => {
+        this.favoriteArticleIds = favoriteIds;
+      });
   }
 
   selectArticle(article: DocArticle): void {
     this.docService.selectArticle(article);
     this.router.navigate(['/article', article.id]);
+  }
+
+  toggleFavorite(articleId: string, event: MouseEvent): void {
+    event.stopPropagation();
+    this.docService.toggleFavorite(articleId);
+  }
+
+  isFavorite(articleId: string): boolean {
+    return this.favoriteArticleIds.has(articleId);
   }
 
   ngOnDestroy(): void {
