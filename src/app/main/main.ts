@@ -1,6 +1,9 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 import { DocumentationService, DocArticle, Section } from '../services/documentation.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-main',
@@ -8,20 +11,40 @@ import { DocumentationService, DocArticle, Section } from '../services/documenta
   templateUrl: './main.html',
   styleUrl: './main.css',
 })
-export class Main implements OnDestroy {
-  selectedArticle$!: ReturnType<typeof this.docService.getSelectedArticle>;
+export class Main implements OnInit, OnDestroy {
+  @Input() article: DocArticle | null = null;
+
   copiedId: string | null = null;
   private copyTimer: ReturnType<typeof setTimeout> | null = null;
+  private destroy$ = new Subject<void>();
 
-  constructor(private docService: DocumentationService) {
-    this.selectedArticle$ = this.docService.getSelectedArticle();
+  constructor(
+    private docService: DocumentationService,
+    private route: ActivatedRoute
+  ) {}
+
+  ngOnInit(): void {
+    // Read route params and load article by ID
+    this.route.params
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(params => {
+        if (params['id']) {
+          const article = this.docService.getArticleById(params['id']);
+          if (article) {
+            this.docService.selectArticle(article);
+          }
+        }
+      });
+  }
+
+  /** If @Input is provided use it, otherwise fall back to service signal */
+  get currentArticle(): DocArticle | null {
+    return this.article ?? this.docService.selectedArticle();
   }
 
   copyCode(code: string, exampleId: string): void {
     navigator.clipboard.writeText(code).then(() => {
       this.copiedId = exampleId;
-
-      // Reset button after 2 seconds
       if (this.copyTimer) clearTimeout(this.copyTimer);
       this.copyTimer = setTimeout(() => {
         this.copiedId = null;
@@ -37,11 +60,7 @@ export class Main implements OnDestroy {
         .filter((paragraph) => paragraph.length > 0);
     }
 
-    const overview = `${section.title} in ${article.title} explains the practical foundation of this topic and how it connects to day-to-day Angular development. ${article.content}`;
-    const practice = `In practice, teams usually combine this concept with typed APIs, predictable state updates, and clear component boundaries. Build small examples first, then scale the pattern to larger features while keeping naming, folder structure, and responsibilities consistent.`;
-    const quality = `For production-ready implementation, focus on readability, accessibility, and maintainability. Add tests around critical behavior, document assumptions, and revisit this section as your app grows so the same pattern remains easy to browse and understand over time.`;
-
-    return [overview, practice, quality];
+    return [];
   }
 
   getSectionCodeExamples(article: DocArticle, section: Section): Array<{ id: string; title: string; language: string; code: string }> {
@@ -61,6 +80,8 @@ export class Main implements OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
     if (this.copyTimer) clearTimeout(this.copyTimer);
   }
 }

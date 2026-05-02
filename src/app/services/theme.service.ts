@@ -1,7 +1,4 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { DOCUMENT } from '@angular/common';
-import { Inject, Optional } from '@angular/core';
+import { Injectable, signal, effect } from '@angular/core';
 
 export type Theme = 'light' | 'dark';
 
@@ -10,42 +7,41 @@ export type Theme = 'light' | 'dark';
 })
 export class ThemeService {
   private readonly STORAGE_KEY = 'app-theme';
-  private themeSubject: BehaviorSubject<Theme>;
-  public theme$: Observable<Theme>;
 
-  constructor(@Optional() @Inject(DOCUMENT) private document: Document) {
-    // Load theme from localStorage or default to 'light'
-    // Check if we're in a browser environment before accessing localStorage
-    let savedTheme: Theme = 'light';
-    if (typeof localStorage !== 'undefined') {
-      savedTheme = (localStorage.getItem(this.STORAGE_KEY) as Theme) || 'light';
-    }
-    
-    this.themeSubject = new BehaviorSubject<Theme>(savedTheme);
-    this.theme$ = this.themeSubject.asObservable();
-    
-    // Apply theme on initialization (only in browser)
-    if (typeof localStorage !== 'undefined') {
-      this.applyTheme(savedTheme);
-    }
+  // Signal-based theme state
+  readonly theme = signal<Theme>(this.loadSavedTheme());
+
+  constructor() {
+    // effect() automatically reacts when the theme signal changes
+    effect(() => {
+      const currentTheme = this.theme();
+      this.applyTheme(currentTheme);
+      this.saveTheme(currentTheme);
+    });
   }
 
   getCurrentTheme(): Theme {
-    return this.themeSubject.value;
+    return this.theme();
   }
 
   toggleTheme(): void {
-    const newTheme: Theme = this.themeSubject.value === 'light' ? 'dark' : 'light';
-    this.setTheme(newTheme);
+    this.theme.update(current => current === 'light' ? 'dark' : 'light');
   }
 
   setTheme(theme: Theme): void {
+    this.theme.set(theme);
+  }
+
+  private loadSavedTheme(): Theme {
+    if (typeof localStorage !== 'undefined') {
+      return (localStorage.getItem(this.STORAGE_KEY) as Theme) || 'light';
+    }
+    return 'light';
+  }
+
+  private saveTheme(theme: Theme): void {
     if (typeof localStorage !== 'undefined') {
       localStorage.setItem(this.STORAGE_KEY, theme);
-    }
-    this.themeSubject.next(theme);
-    if (typeof document !== 'undefined') {
-      this.applyTheme(theme);
     }
   }
 

@@ -1,8 +1,6 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DocumentationService } from '../services/documentation.service';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { DocumentationService, DocArticle } from '../services/documentation.service';
 
 @Component({
   selector: 'app-toc',
@@ -10,15 +8,15 @@ import { takeUntil } from 'rxjs/operators';
   templateUrl: './toc.html',
   styleUrl: './toc.css',
 })
-export class TOC implements OnInit, OnDestroy {
-  selectedArticle$!: ReturnType<typeof this.docService.getSelectedArticle>;
-  private destroy$ = new Subject<void>();
+export class TOC {
+  @Input() article: DocArticle | null = null;
 
-  constructor(private docService: DocumentationService) {
-    this.selectedArticle$ = this.docService.getSelectedArticle();
+  constructor(private docService: DocumentationService) {}
+
+  /** If @Input is provided use it, otherwise fall back to service signal */
+  get currentArticle(): DocArticle | null {
+    return this.article ?? this.docService.selectedArticle();
   }
-
-  ngOnInit(): void {}
 
   scrollToSection(sectionId: string): void {
     const element = document.getElementById(sectionId);
@@ -28,15 +26,10 @@ export class TOC implements OnInit, OnDestroy {
       return;
     }
 
-    const topOffset = element.offsetTop - 24;
+    const topOffset = element.offsetTop - 85;
     mainContent.scrollTo({
       top: topOffset,
       behavior: 'smooth'
     });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 }

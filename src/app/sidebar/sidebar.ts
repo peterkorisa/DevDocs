@@ -1,8 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
 import { DocumentationService, DocCategory, DocArticle } from '../services/documentation.service';
-import { Subject, combineLatest } from 'rxjs';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
@@ -12,55 +11,31 @@ import { takeUntil } from 'rxjs/operators';
   styleUrl: './sidebar.css',
 })
 export class Sidebar implements OnInit, OnDestroy {
-  categories$!: ReturnType<typeof this.docService.getDocumentation>;
-  filteredCategories: DocCategory[] = [];
-  selectedArticleId: string | null = null;
-  favoriteArticleIds = new Set<string>();
+  @Output() articleSelected = new EventEmitter<DocArticle>();
+
   private destroy$ = new Subject<void>();
 
-  constructor(
-    private docService: DocumentationService,
-    private router: Router
-  ) {
-    this.categories$ = this.docService.getDocumentation();
+  constructor(protected docService: DocumentationService) {}
+
+  /** Read the computed signal directly */
+  get filteredCategories(): DocCategory[] {
+    return this.docService.filteredCategories();
+  }
+
+  /** Read the selected article signal */
+  get selectedArticleId(): string | null {
+    const article = this.docService.selectedArticle();
+    return article ? article.id : null;
   }
 
   ngOnInit(): void {
-    // Load documentation on init
     this.docService.loadDocumentation()
       .pipe(takeUntil(this.destroy$))
       .subscribe();
-
-    // Subscribe to both documentation and search query changes
-    combineLatest([
-      this.docService.getDocumentation(),
-      this.docService.getSearchQuery()
-    ])
-    .pipe(takeUntil(this.destroy$))
-    .subscribe(([categories, searchQuery]: [DocCategory[], string]) => {
-      // Filter categories based on search query
-      this.filteredCategories = this.docService.filterDocumentation(searchQuery);
-    });
-
-    // Subscribe to selected article changes
-    this.docService.getSelectedArticle()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((article) => {
-        if (article) {
-          this.selectedArticleId = article.id;
-        }
-      });
-
-    this.docService.getFavoriteArticleIds()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((favoriteIds) => {
-        this.favoriteArticleIds = favoriteIds;
-      });
   }
 
   selectArticle(article: DocArticle): void {
-    this.docService.selectArticle(article);
-    this.router.navigate(['/article', article.id]);
+    this.articleSelected.emit(article);
   }
 
   toggleFavorite(articleId: string, event: MouseEvent): void {
@@ -69,7 +44,7 @@ export class Sidebar implements OnInit, OnDestroy {
   }
 
   isFavorite(articleId: string): boolean {
-    return this.favoriteArticleIds.has(articleId);
+    return this.docService.isFavorite(articleId);
   }
 
   ngOnDestroy(): void {

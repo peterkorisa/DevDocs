@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { PLATFORM_ID, inject } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { PLATFORM_ID } from '@angular/core';
+import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 export interface CodeExample {
@@ -47,10 +47,36 @@ export interface Documentation {
 export class DocumentationService {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly favoritesStorageKey = 'devdocs.favoriteArticles';
-  private documentation$ = new BehaviorSubject<DocCategory[]>([]);
-  private selectedArticle$ = new BehaviorSubject<DocArticle | null>(null);
-  private searchQuery$ = new BehaviorSubject<string>('');
-  private favoriteArticleIds$ = new BehaviorSubject<Set<string>>(new Set());
+
+  // ── Signal-based state ──
+  private readonly _documentation = signal<DocCategory[]>([]);
+  private readonly _selectedArticle = signal<DocArticle | null>(null);
+  private readonly _searchQuery = signal<string>('');
+  private readonly _favoriteArticleIds = signal<Set<string>>(new Set());
+
+  // ── Public readonly signals ──
+  readonly documentation = this._documentation.asReadonly();
+  readonly selectedArticle = this._selectedArticle.asReadonly();
+  readonly searchQuery = this._searchQuery.asReadonly();
+  readonly favoriteArticleIds = this._favoriteArticleIds.asReadonly();
+
+  // ── Computed signal: auto-filters documentation when search query changes ──
+  readonly filteredCategories = computed(() => {
+    const query = this._searchQuery().trim().toLowerCase();
+    const docs = this._documentation();
+
+    if (!query) {
+      return docs;
+    }
+
+    return docs.map(category => ({
+      ...category,
+      children: category.children.filter(article =>
+        article.title.toLowerCase().includes(query) ||
+        article.content.toLowerCase().includes(query)
+      )
+    })).filter(category => category.children.length > 0);
+  });
 
   constructor(private http: HttpClient) {
     this.loadFavoritesFromStorage();
@@ -59,25 +85,28 @@ export class DocumentationService {
   loadDocumentation(): Observable<Documentation> {
     return this.http.get<Documentation>('/documentation.json').pipe(
       tap((data) => {
-        this.documentation$.next(data.documentation);
+        this._documentation.set(data.documentation);
       })
     );
   }
 
-  getDocumentation(): Observable<DocCategory[]> {
-    return this.documentation$.asObservable();
-  }
-
-  getSelectedArticle(): Observable<DocArticle | null> {
-    return this.selectedArticle$.asObservable();
-  }
-
   selectArticle(article: DocArticle): void {
-    this.selectedArticle$.next(article);
+    this._selectedArticle.set(article);
+  }
+
+  getArticleById(id: string): DocArticle | null {
+    const categories = this._documentation();
+    for (const category of categories) {
+      const article = category.children.find((child) => child.id === id);
+      if (article) {
+        return article;
+      }
+    }
+    return null;
   }
 
   getArticleBySlug(slug: string): DocArticle | null {
-    const categories = this.documentation$.value;
+    const categories = this._documentation();
     for (const category of categories) {
       const article = category.children.find((child) => child.slug === slug);
       if (article) {
@@ -88,23 +117,15 @@ export class DocumentationService {
   }
 
   setSearchQuery(query: string): void {
-    this.searchQuery$.next(query);
-  }
-
-  getSearchQuery(): Observable<string> {
-    return this.searchQuery$.asObservable();
-  }
-
-  getFavoriteArticleIds(): Observable<Set<string>> {
-    return this.favoriteArticleIds$.asObservable();
+    this._searchQuery.set(query);
   }
 
   isFavorite(articleId: string): boolean {
-    return this.favoriteArticleIds$.value.has(articleId);
+    return this._favoriteArticleIds().has(articleId);
   }
 
   toggleFavorite(articleId: string): void {
-    const updatedFavorites = new Set(this.favoriteArticleIds$.value);
+    const updatedFavorites = new Set(this._favoriteArticleIds());
 
     if (updatedFavorites.has(articleId)) {
       updatedFavorites.delete(articleId);
@@ -112,23 +133,8 @@ export class DocumentationService {
       updatedFavorites.add(articleId);
     }
 
-    this.favoriteArticleIds$.next(updatedFavorites);
+    this._favoriteArticleIds.set(updatedFavorites);
     this.saveFavoritesToStorage(updatedFavorites);
-  }
-
-  filterDocumentation(searchQuery: string): DocCategory[] {
-    if (!searchQuery.trim()) {
-      return this.documentation$.value;
-    }
-
-    const query = searchQuery.toLowerCase();
-    return this.documentation$.value.map(category => ({
-      ...category,
-      children: category.children.filter(article =>
-        article.title.toLowerCase().includes(query) ||
-        article.content.toLowerCase().includes(query)
-      )
-    })).filter(category => category.children.length > 0);
   }
 
   private loadFavoritesFromStorage(): void {
@@ -144,7 +150,7 @@ export class DocumentationService {
     try {
       const parsed = JSON.parse(rawValue);
       if (Array.isArray(parsed)) {
-        this.favoriteArticleIds$.next(new Set(parsed.filter((id) => typeof id === 'string')));
+        this._favoriteArticleIds.set(new Set(parsed.filter((id) => typeof id === 'string')));
       }
     } catch {
       localStorage.removeItem(this.favoritesStorageKey);

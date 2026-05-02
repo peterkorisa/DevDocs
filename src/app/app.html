@@ -1,8 +1,26 @@
-<app-navbar></app-navbar>
+<app-navbar
+  (searchChanged)="closeSidebar()"
+  (themeToggled)="closeSidebar()">
+</app-navbar>
+
+<button class="hamburger-btn" (click)="toggleSidebar()" aria-label="Toggle sidebar">
+  ☰
+</button>
+
 <div class="container">
-  <app-sidebar></app-sidebar>
+  <div class="sidebar-overlay"
+       [class.visible]="sidebarOpen()"
+       (click)="closeSidebar()">
+  </div>
+
+  <app-sidebar
+    [class.open]="sidebarOpen()"
+    (articleSelected)="onArticleSelected($event)">
+  </app-sidebar>
+
   <main class="main-content">
     <router-outlet></router-outlet>
   </main>
-  <app-toc></app-toc>
+
+  <app-toc [article]="selectedArticle"></app-toc>
 </div>

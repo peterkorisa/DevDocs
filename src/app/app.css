@@ -9,6 +9,7 @@
   display: flex;
   flex: 1;
   overflow: hidden;
+  position: relative;
 }
 
 .main-content {
@@ -17,4 +18,88 @@
   padding: 24px;
   background-color: var(--bg-primary);
   color: var(--text-primary);
+}
+
+/* ── Hamburger button (hidden on desktop) ── */
+.hamburger-btn {
+  display: none;
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 300;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 20px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.hamburger-btn:hover {
+  background: var(--accent-color);
+  color: white;
+}
+
+/* ── Mobile overlay backdrop ── */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 199;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.sidebar-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ── Tablet: hide TOC ── */
+@media (max-width: 1024px) {
+  app-toc {
+    display: none;
+  }
+
+  .main-content {
+    padding: 20px;
+  }
+}
+
+/* ── Mobile: collapsible sidebar ── */
+@media (max-width: 768px) {
+  .hamburger-btn {
+    display: flex;
+  }
+
+  .sidebar-overlay {
+    display: block;
+  }
+
+  app-sidebar {
+    position: fixed;
+    left: -280px;
+    top: 0;
+    z-index: 200;
+    height: 100vh;
+    transition: left 0.3s ease;
+    box-shadow: none;
+  }
+
+  app-sidebar.open {
+    left: 0;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .main-content {
+    padding: 16px;
+    width: 100%;
+  }
 }

@@ -157,3 +157,39 @@ pre {
   color: var(--text-tertiary);
   font-size: 18px;
 }
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .article-view {
+    padding-right: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .article-view {
+    padding: 12px;
+    padding-right: 12px;
+    max-width: 100%;
+  }
+
+  h1 {
+    font-size: 22px;
+  }
+
+  .article-title-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .doc-section h2 {
+    font-size: 18px;
+  }
+
+  .code-container {
+    padding: 10px;
+  }
+
+  pre {
+    font-size: 12px;
+  }
+}

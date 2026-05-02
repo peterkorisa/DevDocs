@@ -1,32 +1,36 @@
 <aside class="sidebar">
   <div class="sidebar-content">
     <div class="categories">
-      <div *ngFor="let category of filteredCategories" class="category-item">
-        <div class="category-header">
-          <span class="category-title">{{ category.title }}</span>
-        </div>
+      @for (category of filteredCategories; track category.id) {
+        <div class="category-item">
+          <div class="category-header">
+            <span class="category-title">{{ category.title }}</span>
+          </div>
 
-        <div class="category-children">
-          <div *ngFor="let article of category.children" class="article-row">
-            <button
-              class="article-item"
-              [class.active]="selectedArticleId === article.id"
-              (click)="selectArticle(article)"
-            >
-              {{ article.title }}
-            </button>
-            <button
-              class="favorite-btn"
-              type="button"
-              [class.active]="isFavorite(article.id)"
-              [attr.aria-label]="isFavorite(article.id) ? 'Remove bookmark for ' + article.title : 'Bookmark ' + article.title"
-              (click)="toggleFavorite(article.id, $event)"
-            >
-              {{ isFavorite(article.id) ? '★' : '☆' }}
-            </button>
+          <div class="category-children">
+            @for (article of category.children; track article.id) {
+              <div class="article-row">
+                <button
+                  class="article-item"
+                  [class.active]="selectedArticleId === article.id"
+                  (click)="selectArticle(article)"
+                >
+                  {{ article.title }}
+                </button>
+                <button
+                  class="favorite-btn"
+                  type="button"
+                  [class.active]="isFavorite(article.id)"
+                  [attr.aria-label]="isFavorite(article.id) ? 'Remove bookmark for ' + article.title : 'Bookmark ' + article.title"
+                  (click)="toggleFavorite(article.id, $event)"
+                >
+                  {{ isFavorite(article.id) ? '★' : '☆' }}
+                </button>
+              </div>
+            }
           </div>
         </div>
-      </div>
+      }
     </div>
   </div>
 </aside>
