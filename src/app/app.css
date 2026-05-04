@@ -18,3 +18,15 @@
   background-color: var(--bg-primary);
   color: var(--text-primary);
 }
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    overflow: auto;
+  }
+  
+  .main-content {
+    overflow-y: visible;
+    padding: 16px;
+  }
+}
