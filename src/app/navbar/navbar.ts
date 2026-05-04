@@ -1,8 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DocumentationService } from '../services/documentation.service';
-import { ThemeService, Theme } from '../services/theme.service';
-import { debounceTime, Subject } from 'rxjs';
+import { Theme } from '../services/theme.service';
+import { debounceTime, Subject, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -10,28 +9,20 @@ import { debounceTime, Subject } from 'rxjs';
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
-export class Navbar {
+export class Navbar implements OnInit, OnDestroy {
+  @Input() currentTheme: Theme = 'light';
+  @Output() searchChange = new EventEmitter<string>();
+  @Output() themeToggle = new EventEmitter<void>();
+
   searchQuery: string = '';
-  currentTheme: Theme = 'light';
   private searchSubject = new Subject<string>();
+  private sub?: Subscription;
 
-  constructor(
-    private docService: DocumentationService,
-    private themeService: ThemeService
-  ) {
-    // Initialize theme
-    this.currentTheme = this.themeService.getCurrentTheme();
-    
-    // Subscribe to theme changes
-    this.themeService.theme$.subscribe(theme => {
-      this.currentTheme = theme;
-    });
-
-    // Debounce search input - wait 300ms after user stops typing
-    this.searchSubject.pipe(
+  ngOnInit(): void {
+    this.sub = this.searchSubject.pipe(
       debounceTime(300)
     ).subscribe(query => {
-      this.docService.setSearchQuery(query);
+      this.searchChange.emit(query);
     });
   }
 
@@ -40,7 +31,10 @@ export class Navbar {
   }
 
   toggleTheme(): void {
-    this.themeService.toggleTheme();
+    this.themeToggle.emit();
+  }
+
+  ngOnDestroy(): void {
+    this.sub?.unsubscribe();
   }
 }
-

@@ -56,3 +56,13 @@
 .theme-toggle:active {
   transform: scale(0.95);
 }
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-wrap: wrap;
+  }
+  .search-container {
+    order: 3;
+    min-width: 100%;
+  }
+}

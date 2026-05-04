@@ -1,4 +1,8 @@
-<app-navbar></app-navbar>
+<app-navbar
+  [currentTheme]="currentTheme"
+  (searchChange)="onSearchChange($event)"
+  (themeToggle)="onThemeToggle()">
+</app-navbar>
 <div class="container">
   <app-sidebar></app-sidebar>
   <main class="main-content">

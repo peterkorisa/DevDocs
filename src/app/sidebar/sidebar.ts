@@ -26,23 +26,19 @@ export class Sidebar implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // Load documentation on init
     this.docService.loadDocumentation()
       .pipe(takeUntil(this.destroy$))
       .subscribe();
 
-    // Subscribe to both documentation and search query changes
     combineLatest([
       this.docService.getDocumentation(),
       this.docService.getSearchQuery()
     ])
     .pipe(takeUntil(this.destroy$))
     .subscribe(([categories, searchQuery]: [DocCategory[], string]) => {
-      // Filter categories based on search query
       this.filteredCategories = this.docService.filterDocumentation(searchQuery);
     });
 
-    // Subscribe to selected article changes
     this.docService.getSelectedArticle()
       .pipe(takeUntil(this.destroy$))
       .subscribe((article) => {

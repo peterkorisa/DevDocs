@@ -21,7 +21,6 @@ export class Main implements OnDestroy {
     navigator.clipboard.writeText(code).then(() => {
       this.copiedId = exampleId;
 
-      // Reset button after 2 seconds
       if (this.copyTimer) clearTimeout(this.copyTimer);
       this.copyTimer = setTimeout(() => {
         this.copiedId = null;

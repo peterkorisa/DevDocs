@@ -157,3 +157,9 @@ pre {
   color: var(--text-tertiary);
   font-size: 18px;
 }
+
+@media (max-width: 1200px) {
+  .article-view {
+    padding-right: 20px;
+  }
+}

@@ -107,7 +107,6 @@
   color: #f5a623;
 }
 
-/* Scrollbar styling */
 .sidebar::-webkit-scrollbar {
   width: 8px;
 }
@@ -123,4 +122,14 @@
 
 .sidebar::-webkit-scrollbar-thumb:hover {
   background: var(--accent-color);
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    max-height: 40vh;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+  }
 }

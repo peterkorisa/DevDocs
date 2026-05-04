@@ -14,8 +14,6 @@ export class ThemeService {
   public theme$: Observable<Theme>;
 
   constructor(@Optional() @Inject(DOCUMENT) private document: Document) {
-    // Load theme from localStorage or default to 'light'
-    // Check if we're in a browser environment before accessing localStorage
     let savedTheme: Theme = 'light';
     if (typeof localStorage !== 'undefined') {
       savedTheme = (localStorage.getItem(this.STORAGE_KEY) as Theme) || 'light';
@@ -24,7 +22,6 @@ export class ThemeService {
     this.themeSubject = new BehaviorSubject<Theme>(savedTheme);
     this.theme$ = this.themeSubject.asObservable();
     
-    // Apply theme on initialization (only in browser)
     if (typeof localStorage !== 'undefined') {
       this.applyTheme(savedTheme);
     }

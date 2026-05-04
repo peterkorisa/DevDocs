@@ -4,8 +4,8 @@ import { RouterOutlet } from '@angular/router';
 import { Navbar } from './navbar/navbar';
 import { Sidebar } from './sidebar/sidebar';
 import { TOC } from './toc/toc';
-import { ThemeService } from './services/theme.service';
-
+import { ThemeService, Theme } from './services/theme.service';
+import { DocumentationService } from './services/documentation.service';
 
 @Component({
   selector: 'app-root',
@@ -15,10 +15,25 @@ import { ThemeService } from './services/theme.service';
 })
 export class App implements OnInit {
   protected readonly title = 'DevDocs';
+  currentTheme: Theme = 'light';
 
-  constructor(private themeService: ThemeService) {}
+  constructor(
+    private themeService: ThemeService,
+    private docService: DocumentationService
+  ) {}
 
   ngOnInit(): void {
-    // Theme service initializes automatically
+    this.currentTheme = this.themeService.getCurrentTheme();
+    this.themeService.theme$.subscribe(theme => {
+      this.currentTheme = theme;
+    });
+  }
+
+  onSearchChange(query: string): void {
+    this.docService.setSearchQuery(query);
+  }
+
+  onThemeToggle(): void {
+    this.themeService.toggleTheme();
   }
 }
